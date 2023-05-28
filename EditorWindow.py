@@ -30,6 +30,16 @@ class EditorWindow:
         # Set the desired font and size
         font = tkfont.Font(family="Arial", size=12)
 
+         # Create a label for displaying the changing text
+        self.display_text = tk.Label(
+            self.window,
+            text="",
+            anchor=tk.CENTER,
+            pady=10,
+            fg="black"  # Set the text color to light gray
+        )
+        self.display_text.pack(side=tk.BOTTOM, fill=tk.X)
+
         self.prev_button = tk.Button(self.window, text="Prev", bg="dark blue", fg="white", command=self.prev_function)
         self.prev_button.pack(side=tk.LEFT, padx=5, pady=5)
 
@@ -44,7 +54,6 @@ class EditorWindow:
 
         self.next_button = tk.Button(self.window, text="Next", bg="dark blue", fg="white", command=self.next_function)
         self.next_button.pack(side=tk.RIGHT, padx=5, pady=5)
-
 
         button_frame = tk.Frame(self.window)
         button_frame.pack(side=tk.TOP, pady=5)
@@ -84,6 +93,10 @@ class EditorWindow:
             self.original_lines = len(self.editor.display)
             self.text.insert(tk.END, text_content)
 
+            position = "[{}/{}]".format(self.editor.pos, len(self.editor.paragraphs)//self.editor.n + 1)
+            self.display_text.config(text=position)
+
+
         # Check if the "Next" button should be initially disabled
         if self.next_button_disabled:
             self.next_button.config(state=tk.DISABLED)
@@ -108,6 +121,11 @@ class EditorWindow:
         self.text.insert(tk.END, text_content)
         self.original = text_content
         self.text.update()
+
+        # Update the display_text label with the new text
+        # Update the display_text label with the new text
+        position = "[{}/{}]".format(self.editor.pos, len(self.editor.paragraphs)//self.editor.n + 1)
+        self.display_text.config(text=position)
 
         # Check if the index is less than the total number of paragraphs
         if self.editor.index < len(self.editor.paragraphs):
@@ -146,6 +164,10 @@ class EditorWindow:
         self.text.insert(tk.END, text_content)
         self.original = text_content
         self.text.update()
+
+        # Update the display_text label with the new text
+        position = "[{}/{}]".format(self.editor.pos, len(self.editor.paragraphs)//self.editor.n + 1)
+        self.display_text.config(text=position)
 
         # Check if the index has reached the end of paragraphs
         if self.editor.index >= len(self.editor.paragraphs):
